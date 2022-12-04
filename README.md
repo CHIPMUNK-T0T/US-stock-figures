@@ -1,2 +1,2 @@
 # US-stock-figures
-create the summry of us stock market figures
+create the summary of us stock market figures
