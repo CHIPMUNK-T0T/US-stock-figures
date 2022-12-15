@@ -127,3 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+/US-stock-venv
+/venv.bat
+/venv.ps1
