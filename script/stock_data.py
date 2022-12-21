@@ -4,6 +4,7 @@ from dateutil.relativedelta import relativedelta
 from yahoo_finance_api2 import share
 from yahoo_finance_api2.exceptions import YahooFinanceError
 
+import date_type
 class StockData:
     """
         入力されたティッカーの株価情報を取り扱う。
@@ -30,19 +31,13 @@ class StockData:
         """
         return self.ticker
  
-    def request_stock_price(self, interval='day', frequency=5, period=10):
+    def request_stock_price(self, stock_date_type = date_type.DAILY_5_MINTUE, period=10):
         """
         株価情報をリクエストする。
 
         Parameters:
-            interval : string
-                取得するデータの時間軸。デフォルトは日足。
-                入力は以下の3つを受け入れ、その他の値が入力された際はエラーを返す。
-                'day'(日足)
-                'week'(週足)
-                'month'(月足)
-            frequency : int
-                取得するデータの時間足。デフォルトは5分。
+            stock_date_type : dict
+                取得するデータタイプ。デフォルトは日足5分足。
             period : int
                 取得するデータの期間。単位はinterval。デフォルトでは10日
 
@@ -51,17 +46,11 @@ class StockData:
                 対象となるティッカーの株価情報。
         """
 
-        if interval.lower() == 'day':
-            period_type = share.PERIOD_TYPE_DAY
-            frequency_type = share.FREQUENCY_TYPE_MINUTE
-        elif interval.lower() == 'week':
-            period_type = share.PERIOD_TYPE_WEEK
-            frequency_type = share.FREQUENCY_TYPE_DAY
-        elif interval.lower() == 'month':
-            period_type = share.PERIOD_TYPE_MONTH
-            frequency_type = share.FREQUENCY_TYPE_MONTH
-
         stock = share.Share(self.ticker)
+
+        period_type = stock_date_type['period_type']
+        frequency_type = stock_date_type['frequency_type']
+        frequency = stock_date_type['frequency']
 
         try:
             stock_data = stock.get_historical(period_type=period_type, period=period, frequency_type=frequency_type, frequency=frequency)
